@@ -1,0 +1,233 @@
+body, div, main, img, p, i,input, ul, li,button {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-size: 100%;
+    color: #fff;
+}
+
+button:focus {
+    outline: 0 none;
+}
+
+/*对firefox有效*/
+button::-moz-focus-inner {
+    border: 0;
+}
+
+input {
+    color: #ffffff;
+    outline: none !important;
+}
+input::-webkit-input-placeholder { /* WebKit browsers */
+    color: #fff;
+}
+input:-moz-placeholder { /* Mozilla Firefox 4 to 18 */
+    color: #fff;
+    opacity:  1;
+}
+input::-moz-placeholder { /* Mozilla Firefox 19+ */
+    color: #fff;
+    opacity:  1;
+}
+input:-ms-input-placeholder { /* Internet Explorer 10+ */
+    color: #fff;
+}
+li {
+    list-style: none;
+}
+
+
+main {
+    width: 60rem;
+    margin: 0 auto;
+    display: flex;
+}
+#bg-image {
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -1;
+}
+#right, #left {
+    width: 30em;
+}
+.progress {
+    cursor: pointer;
+}
+#controls {
+    margin-top: 5em;
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+}
+
+
+#avatar {
+    background-image: url("../assets/images/Firefox.png");
+    background-size: contain;
+    width: 10em;
+    height: 10em;
+    border-radius: .5em;
+}
+
+#controls-right {
+    width: 19em;
+    height: 10em;
+}
+
+.buttons-group {
+    height: 50%;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+}
+.play-button {
+    width: 5rem;
+    height: 3.75rem;
+    background-image: url("../assets/images/icon-play.png");
+    border: none;
+    background-color: hsla(360, 100%, 100%, 0);
+    cursor: pointer;
+}
+#prev-btn {
+    background-position: 30px -240px;
+}
+#play-btn {
+    background-position: 13px -448px;
+}
+#next-btn {
+    background-position: 9px -341px;
+
+}
+#volume-bar {
+    padding-left: 1.5em;
+}
+#volume-btn {
+    cursor: pointer;
+}
+
+#volume-bar > i {
+}
+#volume-bar-outer {
+    cursor: pointer;
+    border-radius: .25em;
+    width: 50%;
+    height: .5em;
+    background-color: hsl(58, 77%, 83%);
+}
+#volume-bar-inner {
+    border-radius: .25em;
+    background-color: hsl(342, 87%, 72%);
+    height: 100%;
+    width: 0;
+}
+#progress-bar {
+    padding-left: 1.5em;
+}
+#progress-bar-outer {
+    cursor: pointer;
+    border-radius: .25em;
+    height: .5em;
+    width: 100%;
+    background-color: hsla(59, 77%, 83%, 1);
+}
+#progress-bar-inner {
+    border-radius: .25em;
+    background-color: hsl(197, 74%, 62%);
+    height: 100%;
+    width: 0;
+}
+
+#wrapper {
+    margin-top: 5em;
+}
+#search-bar {
+    position: relative;
+    margin-left: 3rem;
+    /*width: 13.5rem;*/
+    margin-bottom: 1rem;
+    display: flex;
+    justify-content: space-between;
+}
+#search-bar > input {
+    padding: .5rem;
+    background-color: hsla(0, 0%, 0%, 0);
+    border: 1px solid hsla(147, 66%, 47%, 0.8);
+}
+#prev-page, #next-page {
+    border: 1px solid  hsla(147, 66%, 47%, 0.8);
+    background-color: hsla(0, 0%, 100%, 0);
+    cursor: pointer;
+    padding: .5rem;
+    color: white;
+}
+#suggestion-box {
+    position: absolute;
+    width: 10.625rem;
+    z-index: 1;
+    background-color: white;
+    top: 100%;
+    left: 0;
+    overflow: hidden;
+    font-size: .8rem;
+}
+#suggestion-box > li {
+    color: black;
+    cursor: pointer;
+    background-clip: padding-box;
+    padding: .25rem;
+    transition: background-color .3s;
+}
+#suggestion-box > li:hover {
+    background-color: aquamarine;
+}
+.choosed-item {
+    background-color: aquamarine;
+}
+
+#playlist {
+    height: 24em;
+    overflow-y: auto;
+    overflow-x: hidden;
+    margin-left: 3rem;
+}
+.songs {
+    height: 2.5em;
+    margin-top: .25em;
+    border: 1px solid #a94442;
+    line-height: 2em;
+}
+.songs > div {
+    display: inline-block;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
+.song-name {
+    font-size: 14px;
+    width: 15rem;
+    /*text-align: center;*/
+}
+.song-long {
+    text-align: center;
+    width: 2.5rem;
+    font-size: .688em;
+}
+.song-size {
+    text-align: center;
+    width: 2.5rem;
+    font-size: .688em;
+}
+.singer-name {
+    width: 5rem;
+    text-align: center;
+    font-size: .8em;
+}
+

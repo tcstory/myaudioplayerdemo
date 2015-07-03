@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head lang="zh-CN">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <link rel="stylesheet" href="css/index.css"/>
+    <script src="js/lib/jquery.min.js"></script>
+    <title>甜脆音乐播放器</title>
+    <script>
+        $(function () {
+            var bg_height = document.documentElement.clientHeight;
+            var bg_width = document.documentElement.clientWidth;
+            // 在chrome下这样设置图片,每次打开网页都会闪一下,暂时还不知道怎么决解
+            $('#bg-image > img').css({
+                width: bg_width,
+                height: bg_height
+            });
+        });
+    </script>
+</head>
+<body>
+<div id="bg-image">
+    <img src="assets/images/bg-image.jpg" alt=""/>
+</div>
+    <main>
+        <div id="left">
+            <div id="controls">
+                <div id="avatar">
+                </div>
+                <div id="controls-right">
+                    <div class="buttons-group">
+                        <button id="prev-btn" class="play-button"></button>
+                        <button id="play-btn" class="play-button"></button>
+                        <button id="next-btn" class="play-button"></button>
+                    </div>
+                    <div id="volume-bar">
+                        <i class="volume up icon" id="volume-btn"></i>
+                        <div id="volume-bar-outer">
+                            <div id="volume-bar-inner"></div>
+                        </div>
+                    </div>
+                    <div id="progress-bar">
+                        <div id="song-time">0:00</div>
+                        <div id="progress-bar-outer">
+                            <div id="progress-bar-inner"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div id="right">
+            <div id="wrapper">
+                <div id="search-bar">
+                    <input type="text" placeholder="请搜索..." maxlength="20">
+                    <button id="prev-page">上一页</button>
+                    <button id="next-page">下一页</button>
+                    <ul id="suggestion-box">
+                    </ul>
+                </div>
+                <div id="playlist">
+                </div>
+            </div>
+        </div>
+        <div id="audio">
+            <audio src=""></audio>
+        </div>
+    </main>
+    <script src="js/musicplayer.js"></script>
+    <script src="js/modal.js"></script>
+    <script src="js/data.js"></script>
+    <script src="js/shell.js"></script>
+    <script>
+        MusicPlayer.initModule();
+        Modal.initModule();
+        Data.initModule();
+        Shell.initModule();
+    </script>
+</body>
+</html>
