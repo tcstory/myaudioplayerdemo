@@ -18,11 +18,11 @@ module Shell {
         queryString: '',  // 记录下用户上一次搜索的字符串
         jobID: 0,  // 用来处理chrome下keyup问题而设置的setTimeout的id
         pageNum: 1,
-        isDisplay: false,
-        curSinger: ''
+        isDisplay: false, // 用来标记歌曲列表是否已经显示,否则不允许点击"上一页"和"下一页"
+        curSinger: '' // 记录当前正在播放的歌曲所属的歌手
     };
     var configMap = {
-        timeout: 500,
+        timeout: 500, // 设置在chrome浏览器下,sendSuggestionRequest的时间间隔
         template:
             '<div class="songs">' +
                 '<div class="song-name"><span>num. </span>songName</div>' +
@@ -31,9 +31,9 @@ module Shell {
                 '<div class="singer-name">singerName</div>' +
             '</div>',
         playingState: {
-            init: 0,
-            playing: 1,
-            pause: 2
+            init: 0,  // 首次播放,需要获取歌曲的链接
+            playing: 1, // 正在播放
+            pause: 2 // 暂停播放
         }
 
     };
@@ -76,6 +76,11 @@ module Shell {
         }
     }();
 
+    /**
+     * 处理用户按下的键
+     * @param event
+     * @returns {boolean}
+     */
     function responseKeyboard(event:JQueryKeyEventObject):boolean {
         var name = $.trim(jqueryMap.$inputBar.val());
         // 按下回车键
@@ -132,7 +137,12 @@ module Shell {
 
     }
 
-    function showSuggestion(data) {
+    /**
+     * 弹出候选项窗口
+     * @param data
+     * @returns {boolean}
+     */
+    function showSuggestion(data):boolean {
         refreshSuggestionWindow();
         var result = data.data;
         if (result.length === 0) {
@@ -151,7 +161,12 @@ module Shell {
         return true;
     }
 
-    function showSongs(result) {
+    /**
+     * 无论是在搜索框中按下回车键, 还是点击上一页和下一页,都会调用此方法来显示返回的结果
+     * @param result
+     * @returns {boolean}
+     */
+    function showSongs(result):boolean {
         var data = result.data;
         var $fragment = $(document.createDocumentFragment());
         data.forEach(function (item, index, array) {
@@ -169,7 +184,7 @@ module Shell {
                 singer_name: singerName,
                 song_id: songID,
                 song_name: songName,
-                url_list: urlList,
+                url_list: urlList, // 保存着歌曲url,里面有3种音质
                 order_num: orderNum
             });
             var str = configMap.template.replace(/num|songName|popularity|singerName/g, function (match, pos, originalText) {
@@ -191,18 +206,24 @@ module Shell {
             $fragment.append($part);
 
         });
+
         stateMap.isDisplay = true;
+        // 更新音乐播放器的歌曲列表
         MusicPlayer.updatePlaylist();
+        // 然后清空Modal模块里缓存的播放列表,避免列表的重复
         Modal.emptyPlaylist(true);
+        // 每次在显示结果之前,都要清空原来的播放列表
         jqueryMap.$playlist.html('');
         jqueryMap.$playlist.append($fragment);
 
+        // 每一次获取到新的歌曲列表后,都要更新播放状态
         MusicPlayer.setState({
-            curSong: 0,
+            curSong: 0, // 把当前的歌曲设置成播放列表中的第一首
             playingState: configMap.playingState.init,
-            isCross: true
+            isCross: true  // 如果播放列表得到了更新,那么设置为true
         });
         adjustScrollPosition();
+        return true;
     }
 
     function refreshSuggestionWindow() {
@@ -213,13 +234,24 @@ module Shell {
         return true;
     }
 
-    function adjustScrollPosition() {
+    /**
+     * 每次播放列表更新后,都要把scrollbar移动到顶端
+     * @returns {boolean}
+     */
+    function adjustScrollPosition():boolean {
         if (jqueryMap.$playlist.prop('scrollTop') != 0) {
             jqueryMap.$playlist.prop('scrollTop', 0);
         }
+        return true;
     }
 
+    /**
+     * 处理上一页和下一页的点击事件
+     * @param event
+     * @returns {boolean}
+     */
     function handlePageEvent(event:JQueryMouseEventObject):boolean {
+        // 判断播放列表是否正在显示
         if (!stateMap.isDisplay) {
             return false;
         }
@@ -251,6 +283,11 @@ module Shell {
         return false;
     }
 
+    /**
+     * 设置歌手头像
+     * @param result
+     * @returns {boolean}
+     */
     function changeSingerPic(result):boolean {
         if (result['data']['singerPic']) {
             var url = 'url(' + result['data']['singerPic'] + ')';
@@ -267,6 +304,12 @@ module Shell {
         return true;
     }
 
+    /**
+     * 其实天天动听返回的歌手头像每一次都不一样,但是为了节省资源,我设置成了,
+     * 如果上一次的歌手和这一次的歌手不变,那么不会在获取头像
+     * @param name
+     * @returns {boolean}
+     */
     function getSingerPic(name:string):boolean {
         if (stateMap.curSinger != name) {
             Modal.getSingerPic(name, {
@@ -280,8 +323,13 @@ module Shell {
         return true;
     }
 
-    export function initModule() {
+    /**
+     * 初始化Shell模块
+     * @returns {boolean}
+     */
+    export function initModule():boolean {
         jqueryMap.$searchBar.on('keyup', responseKeyboard);
+        // 点击页面的其他地方,让建议窗口消失
         $('body').on('click', function (event) {
             refreshSuggestionWindow();
             return false;
@@ -297,6 +345,8 @@ module Shell {
         });
         jqueryMap.$prevPage.on('click', handlePageEvent);
         jqueryMap.$nextPage.on('click', handlePageEvent);
+        return true;
     }
+
 }
 

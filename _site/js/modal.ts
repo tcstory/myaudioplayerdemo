@@ -20,7 +20,12 @@ module Modal {
         playlist: _playlist
     };
 
-
+    /**
+     * 获取建议列表
+     * @param name
+     * @param callbacks
+     * @returns {boolean}
+     */
     export function getSuggestions(name:string, callbacks:Callback):boolean {
         var data = {
             q: name,
@@ -30,6 +35,14 @@ module Modal {
         Data.send(url, 3000, data, callbacks);
         return true;
     }
+
+    /**
+     * 获取歌曲
+     * @param name
+     * @param page
+     * @param callbacks
+     * @returns {boolean}
+     */
     export function getSongs(name:string, page:number, callbacks:Callback):boolean {
         var data = {
             q: name,
@@ -41,6 +54,12 @@ module Modal {
         return true;
     }
 
+    /**
+     * 获取歌手头像
+     * @param name
+     * @param callbacks
+     * @returns {boolean}
+     */
     export function getSingerPic(name:string, callbacks:Callback):boolean {
         var data = {
             artist: name
@@ -50,20 +69,36 @@ module Modal {
         return false;
     }
 
+    /**
+     * 把歌曲列表缓存到模块里面
+     * @param item
+     */
     export function storePlaylist(item:SongItem) {
         stateMap.playlist.push(item);
     }
+
+    /**
+     * 返回在模块中缓存的歌曲列表
+     * @returns {Array<SongItem>|Modal._playlist}
+     */
     export function getPlaylist() {
-        console.log(stateMap.playlist);
         return stateMap.playlist;
     }
+
+    /**
+     * 情况模块内部的歌曲列表
+     * @param flag
+     */
     export function emptyPlaylist(flag:boolean) {
         if (flag) {
             stateMap.playlist = [];
         }
     }
 
-
+    /**
+     * 初始化Modal模块
+     * @returns {boolean}
+     */
     export function initModule():boolean {
         return true;
     }

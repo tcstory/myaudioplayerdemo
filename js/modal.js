@@ -5,6 +5,12 @@ var Modal;
     var stateMap = {
         playlist: _playlist
     };
+    /**
+     * 获取建议列表
+     * @param name
+     * @param callbacks
+     * @returns {boolean}
+     */
     function getSuggestions(name, callbacks) {
         var data = {
             q: name,
@@ -15,6 +21,13 @@ var Modal;
         return true;
     }
     Modal.getSuggestions = getSuggestions;
+    /**
+     * 获取歌曲
+     * @param name
+     * @param page
+     * @param callbacks
+     * @returns {boolean}
+     */
     function getSongs(name, page, callbacks) {
         var data = {
             q: name,
@@ -26,6 +39,12 @@ var Modal;
         return true;
     }
     Modal.getSongs = getSongs;
+    /**
+     * 获取歌手头像
+     * @param name
+     * @param callbacks
+     * @returns {boolean}
+     */
     function getSingerPic(name, callbacks) {
         var data = {
             artist: name
@@ -35,21 +54,36 @@ var Modal;
         return false;
     }
     Modal.getSingerPic = getSingerPic;
+    /**
+     * 把歌曲列表缓存到模块里面
+     * @param item
+     */
     function storePlaylist(item) {
         stateMap.playlist.push(item);
     }
     Modal.storePlaylist = storePlaylist;
+    /**
+     * 返回在模块中缓存的歌曲列表
+     * @returns {Array<SongItem>|Modal._playlist}
+     */
     function getPlaylist() {
-        console.log(stateMap.playlist);
         return stateMap.playlist;
     }
     Modal.getPlaylist = getPlaylist;
+    /**
+     * 情况模块内部的歌曲列表
+     * @param flag
+     */
     function emptyPlaylist(flag) {
         if (flag) {
             stateMap.playlist = [];
         }
     }
     Modal.emptyPlaylist = emptyPlaylist;
+    /**
+     * 初始化Modal模块
+     * @returns {boolean}
+     */
     function initModule() {
         return true;
     }

@@ -20,7 +20,7 @@ var Shell;
         jobID: 0,
         pageNum: 1,
         isDisplay: false,
-        curSinger: ''
+        curSinger: '' // 记录当前正在播放的歌曲所属的歌手
     };
     var configMap = {
         timeout: 500,
@@ -33,7 +33,7 @@ var Shell;
         playingState: {
             init: 0,
             playing: 1,
-            pause: 2
+            pause: 2 // 暂停播放
         }
     };
     var sendSuggestionRequest = function () {
@@ -74,6 +74,11 @@ var Shell;
             };
         }
     }();
+    /**
+     * 处理用户按下的键
+     * @param event
+     * @returns {boolean}
+     */
     function responseKeyboard(event) {
         var name = $.trim(jqueryMap.$inputBar.val());
         // 按下回车键
@@ -130,6 +135,11 @@ var Shell;
         }
         return false;
     }
+    /**
+     * 弹出候选项窗口
+     * @param data
+     * @returns {boolean}
+     */
     function showSuggestion(data) {
         refreshSuggestionWindow();
         var result = data.data;
@@ -148,6 +158,11 @@ var Shell;
         stateMap.$candidates = $('#suggestion-box').children();
         return true;
     }
+    /**
+     * 无论是在搜索框中按下回车键, 还是点击上一页和下一页,都会调用此方法来显示返回的结果
+     * @param result
+     * @returns {boolean}
+     */
     function showSongs(result) {
         var data = result.data;
         var $fragment = $(document.createDocumentFragment());
@@ -187,16 +202,21 @@ var Shell;
             $fragment.append($part);
         });
         stateMap.isDisplay = true;
+        // 更新音乐播放器的歌曲列表
         MusicPlayer.updatePlaylist();
+        // 然后清空Modal模块里缓存的播放列表,避免列表的重复
         Modal.emptyPlaylist(true);
+        // 每次在显示结果之前,都要清空原来的播放列表
         jqueryMap.$playlist.html('');
         jqueryMap.$playlist.append($fragment);
+        // 每一次获取到新的歌曲列表后,都要更新播放状态
         MusicPlayer.setState({
             curSong: 0,
             playingState: configMap.playingState.init,
-            isCross: true
+            isCross: true // 如果播放列表得到了更新,那么设置为true
         });
         adjustScrollPosition();
+        return true;
     }
     function refreshSuggestionWindow() {
         // 刷新状态
@@ -205,12 +225,23 @@ var Shell;
         stateMap.$candidates = null;
         return true;
     }
+    /**
+     * 每次播放列表更新后,都要把scrollbar移动到顶端
+     * @returns {boolean}
+     */
     function adjustScrollPosition() {
         if (jqueryMap.$playlist.prop('scrollTop') != 0) {
             jqueryMap.$playlist.prop('scrollTop', 0);
         }
+        return true;
     }
+    /**
+     * 处理上一页和下一页的点击事件
+     * @param event
+     * @returns {boolean}
+     */
     function handlePageEvent(event) {
+        // 判断播放列表是否正在显示
         if (!stateMap.isDisplay) {
             return false;
         }
@@ -240,6 +271,11 @@ var Shell;
         }
         return false;
     }
+    /**
+     * 设置歌手头像
+     * @param result
+     * @returns {boolean}
+     */
     function changeSingerPic(result) {
         if (result['data']['singerPic']) {
             var url = 'url(' + result['data']['singerPic'] + ')';
@@ -256,6 +292,12 @@ var Shell;
         }
         return true;
     }
+    /**
+     * 其实天天动听返回的歌手头像每一次都不一样,但是为了节省资源,我设置成了,
+     * 如果上一次的歌手和这一次的歌手不变,那么不会在获取头像
+     * @param name
+     * @returns {boolean}
+     */
     function getSingerPic(name) {
         if (stateMap.curSinger != name) {
             Modal.getSingerPic(name, {
@@ -268,8 +310,13 @@ var Shell;
         }
         return true;
     }
+    /**
+     * 初始化Shell模块
+     * @returns {boolean}
+     */
     function initModule() {
         jqueryMap.$searchBar.on('keyup', responseKeyboard);
+        // 点击页面的其他地方,让建议窗口消失
         $('body').on('click', function (event) {
             refreshSuggestionWindow();
             return false;
@@ -285,6 +332,7 @@ var Shell;
         });
         jqueryMap.$prevPage.on('click', handlePageEvent);
         jqueryMap.$nextPage.on('click', handlePageEvent);
+        return true;
     }
     Shell.initModule = initModule;
 })(Shell || (Shell = {}));

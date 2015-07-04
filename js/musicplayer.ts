@@ -35,32 +35,38 @@ module MusicPlayer {
             playing: 1,
             pause: 2
         },
-        musicQuality: {
+        musicQuality: { // 要播放的音乐品质
             compress: 0,
             standard: 1,
             high: 2
         }
     };
     var stateMap = {
-        curSong: 0,
+        curSong: 0, //当前歌曲
         curState: configMap.playingState.init,
         playlist: _playlist,
-        timeId: null,
+        timeId: true, // 用来控制是否允许更新进度条
         quality: configMap.musicQuality.standard,
-        isCross: false
+        isCross: false  // 如果播放列表得到了更新,那么设置为true
     };
     var audio = <HTMLAudioElement>jqueryMap.$audio.get(0);
 
+    /**
+     * 由于timeupdate每250ms触发一次,所以要控制一下更新进度条的频率
+     * @returns {boolean}
+     */
     function timeupdateHandler():boolean {
-        if(!stateMap.timeId) {
+        if(stateMap.timeId) {
             setTimeout(function () {
+                // 更新进度条
                 jqueryMap.$progressBarInner.css('width', function (index, oldValue) {
                     var duration = audio.duration;
                     var curTime = audio.currentTime;
                     var percentage = curTime / duration;
-                    stateMap.timeId = null;
                     return configMap.progressBarOuterWidth * percentage;
                 });
+
+                // 更新显示的时间
                 // parseFloat和parseInt的参数都是string类型的
                 var curTime = parseFloat(audio.currentTime+'');
                 var minutes = parseInt(curTime/60+'');
@@ -69,11 +75,18 @@ module MusicPlayer {
                     seconds = '0' + seconds;
                 }
                 jqueryMap.$songTime.text(minutes+':'+seconds);
-            }, 1)
+                stateMap.timeId = true;
+            }, 800)
         }
+        stateMap.timeId = false;
         return false;
     }
 
+    /**
+     * 处理音量控制
+     * @param event
+     * @returns {boolean}
+     */
     function volumeBarClickHandler(event):boolean {
         var diff = event.clientX - configMap.volumeBarOuterOffsetLeft;
         var percentage = diff / configMap.volumeBarOuterWidth;
@@ -84,6 +97,11 @@ module MusicPlayer {
         return false;
     }
 
+    /**
+     * 处理进度条控制
+     * @param event
+     * @returns {boolean}
+     */
     function progressBarHandler(event):boolean {
         var diff = event.clientX - configMap.progressBarOuterOffsetLeft;
         var percentage = diff / configMap.progressBarOuterWidth;
@@ -95,6 +113,10 @@ module MusicPlayer {
         return false;
     }
 
+    /**
+     * 播放歌曲
+     * @returns {boolean}
+     */
     export function playSong():boolean {
         switch (stateMap.curState) {
             case configMap.playingState.init:
@@ -163,10 +185,19 @@ module MusicPlayer {
         return true;
     }
 
+    /**
+     * 更新播放列表
+     * @returns {boolean}
+     */
     export function updatePlaylist() {
         stateMap.playlist = Modal.getPlaylist();
         return true;
     }
+
+    /**
+     * 设置当前播放器的状态
+     * @param obj
+     */
     export function setState(obj:{curSong:number;playingState:number;isCross:boolean}) {
         stateMap.curSong = obj.curSong;
         stateMap.curState = obj.playingState;
