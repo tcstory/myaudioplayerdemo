@@ -12,7 +12,7 @@ module Data {
         error:(any)=>any;
     }
 
-    export function send(url:string, timeout:number, data:MyData, callbacks:Callback) {
+    export function send(url:string, callbacks:Callback, data:MyData = {}, timeout:number = 3000) {
         $.ajax({
             url:url,
             method: 'GET',

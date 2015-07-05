@@ -7,6 +7,7 @@ body, div, main, img, p, i,input, ul, li,button {
 body {
     font-size: 100%;
     color: #fff;
+    background-image: url("../assets/images/congruent_outline.png");
 }
 
 button:focus {
@@ -197,6 +198,10 @@ main {
     overflow-y: auto;
     overflow-x: hidden;
     margin-left: 3rem;
+}
+
+#playlist > div {
+    cursor: pointer;
 }
 .songs {
     height: 2.5em;

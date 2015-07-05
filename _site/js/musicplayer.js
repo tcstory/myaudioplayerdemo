@@ -1,5 +1,6 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 /// <reference path="modal.ts" />
+/// <reference path="shell.ts" />
 var MusicPlayer;
 (function (MusicPlayer) {
     "use strict";
@@ -99,7 +100,7 @@ var MusicPlayer;
         return false;
     }
     /**
-     * 播放歌曲
+     * 播放歌曲,响应的是按钮的事件
      * @returns {boolean}
      */
     function playSong() {
@@ -107,6 +108,10 @@ var MusicPlayer;
             case configMap.playingState.init:
                 // 有些歌曲有版权纠纷,所以返回的播放列表为空 例如"蔡依林"第一页结果的歌曲"倒带"
                 var songPath = stateMap.playlist[stateMap.curSong]['url_list'][stateMap.quality]['url'];
+                // 在热歌列表中,由于歌手都不同,所以每一次都要重新获取歌手头像
+                var singerName = stateMap.playlist[stateMap.curSong]['singer_name'];
+                console.log(singerName);
+                Shell.getSingerPic(singerName);
                 jqueryMap.$audio.attr({
                     src: songPath
                 });
@@ -145,6 +150,10 @@ var MusicPlayer;
             return false;
         }
         var songPath = stateMap.playlist[stateMap.curSong]['url_list'][stateMap.quality]['url'];
+        // 在热歌列表中,由于歌手都不同,所以每一次都要重新获取歌手头像
+        var singerName = stateMap.playlist[stateMap.curSong]['singer_name'];
+        console.log(singerName);
+        Shell.getSingerPic(singerName);
         jqueryMap.$audio.attr({
             src: songPath
         });
@@ -160,6 +169,10 @@ var MusicPlayer;
             return false;
         }
         var songPath = stateMap.playlist[stateMap.curSong]['url_list'][stateMap.quality]['url'];
+        // 在热歌列表中,由于歌手都不同,所以每一次都要重新获取歌手头像
+        var singerName = stateMap.playlist[stateMap.curSong]['singer_name'];
+        console.log(singerName);
+        Shell.getSingerPic(singerName);
         jqueryMap.$audio.attr({
             src: songPath
         });

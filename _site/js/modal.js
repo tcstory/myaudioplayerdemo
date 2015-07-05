@@ -17,7 +17,7 @@ var Modal;
             size: 5
         };
         var url = "http://so.ard.iyyin.com/suggest.do?";
-        Data.send(url, 3000, data, callbacks);
+        Data.send(url, callbacks, data, 3000);
         return true;
     }
     Modal.getSuggestions = getSuggestions;
@@ -35,7 +35,7 @@ var Modal;
             page: page
         };
         var url = 'http://so.ard.iyyin.com/s/song_with_out?';
-        Data.send(url, 3000, data, callbacks);
+        Data.send(url, callbacks, data, 3000);
         return true;
     }
     Modal.getSongs = getSongs;
@@ -50,7 +50,7 @@ var Modal;
             artist: name
         };
         var url = 'http://lp.music.ttpod.com/pic/down?';
-        Data.send(url, 3000, data, callbacks);
+        Data.send(url, callbacks, data, 3000);
         return false;
     }
     Modal.getSingerPic = getSingerPic;
@@ -80,6 +80,15 @@ var Modal;
         }
     }
     Modal.emptyPlaylist = emptyPlaylist;
+    /**
+     * 返回热门歌曲
+     * @param url
+     * @param callbacks
+     */
+    function getRandomSongs(url, callbacks) {
+        Data.send(url, callbacks);
+    }
+    Modal.getRandomSongs = getRandomSongs;
     /**
      * 初始化Modal模块
      * @returns {boolean}
