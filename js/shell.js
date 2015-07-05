@@ -277,15 +277,18 @@ var Shell;
      * @returns {boolean}
      */
     function changeSingerPic(result) {
-        if (result['data']['singerPic']) {
-            var url = 'url(' + result['data']['singerPic'] + ')';
-            console.log(url);
-            jqueryMap.$avatar.css({
-                'background-image': url
-            });
+        // 有时候返回的数据是这样的,以beyond为例,所以无法找到图片,{"msg":"PARAMS ERROR","code":2},官网也是这样
+        if (result['data']) {
+            if (result['data']['singerPic']) {
+                var url = 'url(' + result['data']['singerPic'] + ')';
+                console.log(url);
+                jqueryMap.$avatar.css({
+                    'background-image': url
+                });
+            }
         }
         else {
-            url = "../assets/images/Firefox.png";
+            url = "url(assets/images/Firefox.png)";
             jqueryMap.$avatar.css({
                 'background-image': url
             });
@@ -310,6 +313,19 @@ var Shell;
         }
         return true;
     }
+    Shell.getSingerPic = getSingerPic;
+    /**
+     * 获取热门歌曲,在一打开页面的时候就会调用
+     */
+    function showRandomSongs() {
+        var url = 'http://v1.ard.h.itlily.com/plaza/newest/50/jsonp_plaza?';
+        Modal.getRandomSongs(url, {
+            success: showSongs,
+            error: function (textStatus) {
+                console.log(textStatus);
+            }
+        });
+    }
     /**
      * 初始化Shell模块
      * @returns {boolean}
@@ -328,10 +344,13 @@ var Shell;
                 isCross: false
             });
             MusicPlayer.playSong();
-            getSingerPic($(event.target.parentNode).attr('data-singer-name'));
         });
         jqueryMap.$prevPage.on('click', handlePageEvent);
         jqueryMap.$nextPage.on('click', handlePageEvent);
+        // 让一切都准备好后,再获取热门歌曲
+        setTimeout(function () {
+            showRandomSongs();
+        }, 0);
         return true;
     }
     Shell.initModule = initModule;

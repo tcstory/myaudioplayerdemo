@@ -198,6 +198,10 @@ main {
     overflow-x: hidden;
     margin-left: 3rem;
 }
+
+#playlist > div {
+    cursor: pointer;
+}
 .songs {
     height: 2.5em;
     margin-top: .25em;

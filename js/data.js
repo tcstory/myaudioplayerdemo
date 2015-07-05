@@ -1,7 +1,9 @@
 /// <reference path="../typings/jquery/jquery.d.ts" />
 var Data;
 (function (Data) {
-    function send(url, timeout, data, callbacks) {
+    function send(url, callbacks, data, timeout) {
+        if (data === void 0) { data = {}; }
+        if (timeout === void 0) { timeout = 3000; }
         $.ajax({
             url: url,
             method: 'GET',
